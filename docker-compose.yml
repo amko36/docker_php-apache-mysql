@@ -1,0 +1,30 @@
+version: '3.1'
+
+services:
+  php:
+    build: ./build/php-apache
+    container_name: "php-apache"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ./apache/html:/var/www/html
+      - ./apache/certs:/etc/apache2/certs
+      - ./apache/sites-enabled:/etc/apache2/sites-enabled
+      - ./apache/sites-available:/etc/apache2/sites-available
+      - ./apache/apache2.conf:/etc/apache2/apache2.conf
+    depends_on:
+      - mysql
+
+  mysql:
+    build: ./build/mysql
+    ports:
+      - 3306:3306
+    restart: always
+    volumes:
+      - ./mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: mysql_root_password
+      MYSQL_USER: mysql_user
+      MYSQL_PASSWORD: mysl_password
+
